@@ -22,7 +22,7 @@ export class LoginDTO {
 
 
 /**
- * 登录参数校验
+ * 发送邮件参数校验
  */
  export class SendMailDTO {
   @Rule(RuleType.string().email().required())
