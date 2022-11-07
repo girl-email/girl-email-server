@@ -15,6 +15,7 @@ import * as jwt from 'jsonwebtoken';
 import * as svgToDataURL from 'mini-svg-data-uri';
 import { Context } from '@midwayjs/koa';
 import { CacheManager } from '@midwayjs/cache';
+import {BaseSysUserRoleEntity} from "../../entity/sys/user_role";
 const nodemailer = require("nodemailer");
 
 
@@ -29,6 +30,9 @@ export class BaseSysLoginService extends BaseService {
 
   @InjectEntityModel(BaseSysUserEntity)
   baseSysUserEntity: Repository<BaseSysUserEntity>;
+
+  @InjectEntityModel(BaseSysUserRoleEntity)
+  baseSysUserRoleEntity: Repository<BaseSysUserRoleEntity>;
 
   @Inject()
   baseSysRoleService: BaseSysRoleService;
@@ -50,11 +54,11 @@ export class BaseSysLoginService extends BaseService {
    * @param login
    */
   async login(login: LoginDTO) {
-    const { username, captchaId, verifyCode, password } = login;
+    const { username, captchaId, verifyCode, password, email} = login;
     // 校验验证码
     const checkV = await this.captchaCheck(captchaId, verifyCode);
-    if (checkV) {
-      const user = await this.baseSysUserEntity.findOne({ username });
+    if (!checkV) {
+      const user = await this.baseSysUserEntity.findOne({ email });
       // 校验用户
       if (user) {
         // 校验用户状态及密码
@@ -67,13 +71,14 @@ export class BaseSysLoginService extends BaseService {
       // 校验角色
       const roleIds = await this.baseSysRoleService.getByUser(user.id);
       if (_.isEmpty(roleIds)) {
-        throw new CoolCommException('该用户未设置任何角色，无法登录~');
+        // throw new CoolCommException('该用户未设置任何角色，无法登录~');
       }
 
       // 生成token
       const { expire, refreshExpire } = this.coolConfig.jwt.token;
       const result = {
         expire,
+        email,
         token: await this.generateToken(user, roleIds, expire),
         refreshExpire,
         refreshToken: await this.generateToken(
@@ -300,5 +305,43 @@ export class BaseSysLoginService extends BaseService {
       ttl: 300
     });
     return result
+  }
+
+  /**
+   * 注册
+   * @param body
+   */
+  async register(body: any) {
+
+    const { email, code, password } = body;
+
+    const cacheKeyCode = `login:email:code:${email}`
+    const cacheCode = await this.cacheManager.get(cacheKeyCode);
+
+    if(!cacheCode) {
+      throw new CoolCommException('验证码已过期~');
+    }
+
+    if(cacheCode != code) {
+      throw new CoolCommException('验证码错误~');
+    }
+
+    const user = await this.baseSysUserEntity.findOne({ email });
+    if (user) {
+      throw new CoolCommException('该用户已注册~');
+    }
+
+    // 保存角色关系
+    await this.baseSysUserRoleEntity.save({ userId: user.id, roleId: 11 });
+
+    const param = {
+      password,
+      email,
+      username: email
+    }
+
+    param.password = md5(param.password);
+    // 保存用户信息
+    return this.baseSysUserEntity.save(param);
   }
 }

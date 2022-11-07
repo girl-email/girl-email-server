@@ -1,6 +1,6 @@
 import { Provide, Body, Inject, Post, Get, Query } from '@midwayjs/decorator';
 import { CoolController, BaseController, CoolEps } from '@cool-midway/core';
-import { LoginDTO, SendMailDTO } from '../../dto/login';
+import { LoginDTO, SendMailDTO, RegisterDTO } from '../../dto/login';
 import { BaseSysLoginService } from '../../service/sys/login';
 import { BaseSysParamService } from '../../service/sys/param';
 import { Context } from '@midwayjs/koa';
@@ -64,6 +64,16 @@ export class BaseOpenController extends BaseController {
   }
 
 
+
+  /**
+   * 刷新token
+   */
+  @Get('/refreshToken', {summary: '刷新token'})
+  async refreshToken(@Query('refreshToken') refreshToken: string) {
+    return this.ok(await this.baseSysLoginService.refreshToken(refreshToken));
+  }
+
+
   /**
    * 发邮件
    * @param email
@@ -78,10 +88,16 @@ export class BaseOpenController extends BaseController {
   }
 
   /**
-   * 刷新token
+   * 注册
+   * @param email
+   * @returns
    */
-  @Get('/refreshToken', {summary: '刷新token'})
-  async refreshToken(@Query('refreshToken') refreshToken: string) {
-    return this.ok(await this.baseSysLoginService.refreshToken(refreshToken));
+  @Post('/register', {summary: '注册'})
+  @Validate()
+  async register(
+    @Body() body: RegisterDTO,
+  ) {
+    return this.ok(await this.baseSysLoginService.register(body));
   }
+
 }

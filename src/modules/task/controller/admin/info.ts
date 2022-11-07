@@ -20,7 +20,7 @@ import { TaskInfoService } from '../../service/info';
   entity: TaskInfoEntity,
   service: TaskInfoService,
   before: ctx => {
-    ctx.request.body.limit = ctx.request.body.repeatCount;
+    // ctx.request.body.limit = ctx.request.body?.repeatCount || 10;
   },
   pageQueryOp: {
     fieldEq: ['status', 'type'],

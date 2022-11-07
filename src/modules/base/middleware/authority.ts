@@ -107,19 +107,19 @@ export class BaseAuthorityMiddleware
           if (rToken !== token && this.jwtConfig.jwt.sso) {
             statusCode = 401;
           } else {
-            let perms: string[] = await this.cacheManager.get(
-              `admin:perms:${ctx.admin.userId}`
-            );
-            if (!_.isEmpty(perms)) {
-              perms = perms.map(e => {
-                return e.replace(/:/g, '/');
-              });
-              if (!perms.includes(url.split('?')[0].replace('/admin/', ''))) {
-                statusCode = 403;
-              }
-            } else {
-              statusCode = 403;
-            }
+            // let perms: string[] = await this.cacheManager.get(
+            //   `admin:perms:${ctx.admin.userId}`
+            // );
+            // if (!_.isEmpty(perms)) {
+            //   perms = perms.map(e => {
+            //     return e.replace(/:/g, '/');
+            //   });
+            //   if (!perms.includes(url.split('?')[0].replace('/admin/', ''))) {
+            //     statusCode = 403;
+            //   }
+            // } else {
+            //   statusCode = 403;
+            // }
           }
         } else {
           statusCode = 401;
