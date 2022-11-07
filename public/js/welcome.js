@@ -1,4 +1,4 @@
-const duration = 0.8;
+const duration = 0.4;
 const delay = 0.3;
 // eslint-disable-next-line no-undef
 const revealText = document.querySelector('.reveal');
