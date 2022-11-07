@@ -25,7 +25,7 @@ export class LoginDTO {
  * 登录参数校验
  */
  export class SendMailDTO {
-  @Rule(RuleType.string().email())
+  @Rule(RuleType.string().email().required())
   email: string;
 
 }

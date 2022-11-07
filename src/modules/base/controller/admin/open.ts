@@ -28,7 +28,7 @@ export class BaseOpenController extends BaseController {
    * 实体信息与路径
    * @returns
    */
-  @Get('/eps', { summary: '实体信息与路径' })
+  @Get('/eps', {summary: '实体信息与路径'})
   public async getEps() {
     return this.ok(this.eps.admin);
   }
@@ -36,7 +36,7 @@ export class BaseOpenController extends BaseController {
   /**
    * 根据配置参数key获得网页内容(富文本)
    */
-  @Get('/html', { summary: '获得网页内容的参数值' })
+  @Get('/html', {summary: '获得网页内容的参数值'})
   async htmlByKey(@Query('key') key: string) {
     this.ctx.body = await this.baseSysParamService.htmlByKey(key);
   }
@@ -45,7 +45,7 @@ export class BaseOpenController extends BaseController {
    * 登录
    * @param login
    */
-  @Post('/login', { summary: '登录' })
+  @Post('/login', {summary: '登录'})
   @Validate()
   async login(@Body() login: LoginDTO) {
     return this.ok(await this.baseSysLoginService.login(login));
@@ -54,7 +54,7 @@ export class BaseOpenController extends BaseController {
   /**
    * 获得验证码
    */
-  @Get('/captcha', { summary: '验证码' })
+  @Get('/captcha', {summary: '验证码'})
   async captcha(
     @Query('type') type: string,
     @Query('width') width: number,
@@ -66,21 +66,21 @@ export class BaseOpenController extends BaseController {
 
   /**
    * 发邮件
-   * @param email 
-   * @returns 
+   * @param email
+   * @returns
    */
-  @Post('/sendEmail', { summary: '发邮件' })
+  @Post('/sendEmail', {summary: '发邮件'})
   @Validate()
-    async sendEmail(
-      @Body() body: SendMailDTO,
-    ) {
-      return this.ok(await this.baseSysLoginService.sendEmail(body.email));
-    }
+  async sendEmail(
+    @Body() body: SendMailDTO,
+  ) {
+    return this.ok(await this.baseSysLoginService.sendEmail(body.email));
+  }
 
   /**
    * 刷新token
    */
-  @Get('/refreshToken', { summary: '刷新token' })
+  @Get('/refreshToken', {summary: '刷新token'})
   async refreshToken(@Query('refreshToken') refreshToken: string) {
     return this.ok(await this.baseSysLoginService.refreshToken(refreshToken));
   }

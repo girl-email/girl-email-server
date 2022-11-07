@@ -10,8 +10,8 @@ export default {
     host: '127.0.0.1',
     port: 3306,
     username: 'root',
-    password: '',
-    database: 'cool',
+    password: '123456',
+    database: 'girlfriend_email_dev',
     // 自动建表 注意：线上部署的时候不要使用，有可能导致数据丢失
     synchronize: true,
     // 打印日志

@@ -251,6 +251,15 @@ export class BaseSysLoginService extends BaseService {
    * 发邮件
    */
   async sendEmail(email: string) {
+    const cacheKeyTime = `login:email:time:${email}`
+
+    const cacheKeyCode = `login:email:code:${email}`
+    const flag = await this.cacheManager.get(cacheKeyTime);
+    if (flag && Number(flag) >= 2) {
+      throw new CoolCommException('发送过于频繁, 请稍后重试~');
+    }
+
+
     let EmailFrom = '"girl email 官方" <xiaobo21@163.com>';
 
     //发送者邮箱厂家
@@ -271,24 +280,25 @@ export class BaseSysLoginService extends BaseService {
       auth: EamilAuth
     });
 
-
-
     const svg = svgCaptcha.create({
       charPreset: '1234567890',
     });
 
     const code = svg.text
 
-  
     let mailOptions = {
       from: EmailFrom,
       to: email,
       subject: EmailSubject,
       html: `<div>你的验证码是: ${code}</div>`
     };
-    transporter.sendMail(mailOptions, (error, info={}) => {
-      return true
+    const result = await transporter.sendMail(mailOptions, (error, info={}) => {
     });
-    return true
+
+    await this.cacheManager.set(cacheKeyTime, flag ? Number(flag)+1: 1);
+    await this.cacheManager.set(cacheKeyCode, code, {
+      ttl: 300
+    });
+    return result
   }
 }
