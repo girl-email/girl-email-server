@@ -9,7 +9,7 @@ export default {
     type: 'mysql',
     host: '127.0.0.1',
     port: 3306,
-    username: 'root',
+    username: 'girl-email',
     password: '123456',
     database: 'girl-email',
     // 自动建表 注意：线上部署的时候不要使用，有可能导致数据丢失
