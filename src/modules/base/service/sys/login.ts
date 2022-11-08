@@ -339,8 +339,6 @@ export class BaseSysLoginService extends BaseService {
             throw new CoolCommException('该用户已注册~');
         }
 
-        // 保存角色关系
-        await this.baseSysUserRoleEntity.save({userId: user.id, roleId: 11});
 
         const param = {
             password,
@@ -350,6 +348,10 @@ export class BaseSysLoginService extends BaseService {
 
         param.password = md5(param.password);
         // 保存用户信息
-        return this.baseSysUserEntity.save(param);
+        const newUser = await this.baseSysUserEntity.save(param);
+
+        // 保存角色关系
+        await this.baseSysUserRoleEntity.save({userId: newUser.id, roleId: 11});
+
     }
 }
