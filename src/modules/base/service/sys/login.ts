@@ -305,7 +305,9 @@ export class BaseSysLoginService extends BaseService {
         const result = await transporter.sendMail(mailOptions, (error, info = {}) => {
         });
         // 存发送次数
-        await this.cacheManager.set(cacheKeyTime, flag ? Number(flag) + 1 : 1);
+        await this.cacheManager.set(cacheKeyTime, flag ? Number(flag) + 1 : 1, {
+            ttl: 300
+        });
         // 存code， 五分钟过期
         await this.cacheManager.set(cacheKeyCode, code, {
             ttl: 300
