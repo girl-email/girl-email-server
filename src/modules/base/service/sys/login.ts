@@ -268,9 +268,9 @@ export class BaseSysLoginService extends BaseService {
         // 缓存验证码的KEY
         const cacheKeyCode = `login:email:code:${email}`
         // 获取次数
-        const flag = await this.cacheManager.get(cacheKeyTime);
+        const timer = await this.cacheManager.get(cacheKeyTime);
         // 如果大于两次的话
-        if (flag && Number(flag) >= 2) {
+        if (timer && Number(timer) >= 2) {
             throw new CoolCommException('发送过于频繁, 请稍后重试~');
         }
         // 邮件发送标题
@@ -305,7 +305,7 @@ export class BaseSysLoginService extends BaseService {
         const result = await transporter.sendMail(mailOptions, (error, info = {}) => {
         });
         // 存发送次数
-        await this.cacheManager.set(cacheKeyTime, flag ? Number(flag) + 1 : 1, {
+        await this.cacheManager.set(cacheKeyTime, timer ? Number(timer) + 1 : 1, {
             ttl: 300
         });
         // 存code， 五分钟过期
