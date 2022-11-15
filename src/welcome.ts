@@ -1,7 +1,6 @@
 import { Controller, Get, Inject, Body, Post } from '@midwayjs/decorator';
 import {Context} from '@midwayjs/koa';
 import {makeHttpRequest} from '@midwayjs/core';
-import {SendMailDTO} from "./modules/base/dto/login";
 
 /**
  * 欢迎界面
