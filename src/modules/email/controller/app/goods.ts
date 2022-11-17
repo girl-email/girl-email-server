@@ -1,4 +1,4 @@
-import { DemoGoodsEntity } from '../../entity/goods';
+import { DemoGoodsEntity } from '../../entity/config';
 import { BaseController, CoolController } from '@cool-midway/core';
 import { DemoGoodsService } from '../../service/goods';
 

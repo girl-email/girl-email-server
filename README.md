@@ -40,7 +40,7 @@ $ open http://localhost:8001/
 
 #### 新建一个数据表
 
-`src/modules/demo/entity/goods.ts`，项目启动数据库会自动创建该表，无需手动创建
+`src/modules/demo/entity/conf.ts`，项目启动数据库会自动创建该表，无需手动创建
 
 ```ts
 import { EntityModel } from '@midwayjs/orm';
@@ -65,7 +65,7 @@ export class DemoAppGoodsEntity extends BaseEntity {
 
 #### 编写 api 接口
 
-`src/modules/demo/controller/app/goods.ts`，快速编写 6 个 api 接口
+`src/modules/demo/controller/app/conf.ts`，快速编写 6 个 api 接口
 
 ```ts
 import { Provide } from '@midwayjs/decorator';

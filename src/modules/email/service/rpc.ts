@@ -1,5 +1,5 @@
 import { App, Inject, Provide } from '@midwayjs/decorator';
-import { DemoGoodsEntity } from '../entity/goods';
+import { DemoGoodsEntity } from '../entity/config';
 import { IMidwayApplication } from '@midwayjs/core';
 import {
   BaseRpcService,
