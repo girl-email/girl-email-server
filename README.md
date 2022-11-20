@@ -113,5 +113,3 @@ $ npm stop
 - 使用 `npm test` 来执行单元测试。
 
 [midway]: https://midwayjs.org
-
-### 低价服务器
